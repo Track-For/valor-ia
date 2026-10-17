@@ -1,0 +1,34 @@
+[
+  {
+    "name": "final-desktop",
+    "errors": [],
+    "galleryDirections": true,
+    "solutionSync": true,
+    "reverses": true,
+    "overflow": false
+  },
+  {
+    "name": "final-mobile",
+    "errors": [],
+    "galleryDirections": true,
+    "solutionSync": true,
+    "reverses": true,
+    "overflow": false
+  },
+  {
+    "name": "short",
+    "errors": [],
+    "galleryDirections": true,
+    "solutionSync": true,
+    "reverses": true,
+    "overflow": false
+  },
+  {
+    "name": "small",
+    "errors": [],
+    "galleryDirections": true,
+    "solutionSync": true,
+    "reverses": true,
+    "overflow": false
+  }
+]

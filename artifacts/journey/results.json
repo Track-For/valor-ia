@@ -1,0 +1,32 @@
+[
+  {
+    "name": "desktop",
+    "errors": [],
+    "overflow": false,
+    "sections": 7,
+    "motion": true,
+    "galleryMoves": true,
+    "pauseWorks": true,
+    "broken": []
+  },
+  {
+    "name": "mobile",
+    "errors": [],
+    "overflow": false,
+    "sections": 7,
+    "motion": true,
+    "galleryMoves": true,
+    "pauseWorks": true,
+    "broken": []
+  },
+  {
+    "name": "reduced",
+    "errors": [],
+    "overflow": false,
+    "sections": 7,
+    "motion": false,
+    "galleryMoves": false,
+    "pauseWorks": true,
+    "broken": []
+  }
+]
