@@ -47,6 +47,12 @@ function GalleryTile({ type }: { type: number }) {
 
 export function XPJourney() {
   const root = useRef<HTMLDivElement>(null);
+  const introMotion = useRef<ChapterMotion[]>([{ progress: 0 }]);
+  const registerIntroShader = useCallback((index: number, render: () => void) => {
+    const surface = introMotion.current[index];
+    surface.render = render;
+    return () => { if (surface.render === render) surface.render = undefined; };
+  }, []);
   const chapterMotion = useRef<ChapterMotion[]>([{ progress: 0 }, { progress: 0 }, { progress: 0 }]);
   const registerChapterShader = useCallback((index: number, render: () => void) => {
     const surface = chapterMotion.current[index];
@@ -76,7 +82,23 @@ export function XPJourney() {
       const galleryObserver = new IntersectionObserver(([entry]) => gallery.classList.toggle("is-visible", entry.isIntersecting));
       galleryObserver.observe(gallery);
 
-      gsap.from(".j-intro-reveal", { y: 65, autoAlpha: 0, stagger: .16, duration: .9, scrollTrigger: { trigger: ".j-intro", start: "top 75%", once: true } });
+      const intro = scope.querySelector<HTMLElement>(".j-intro")!;
+      const introSurface = introMotion.current[0];
+      const introSlot = intro.querySelector<HTMLElement>(".j-intro-photo-slot")!;
+      const introLeft = intro.querySelector<HTMLElement>(".j-intro-left")!;
+      const introTitle = introLeft.querySelector<HTMLElement>("h2")!;
+      const introTimeline = gsap.timeline({
+        scrollTrigger: { id: "xp-intro-photo", trigger: introTitle, start: "bottom bottom", endTrigger: intro, end: "top top", scrub: .45, invalidateOnRefresh: true },
+      });
+      introTimeline.fromTo(".j-intro-photo", {
+        x: 0, y: 0, rotation: 0, rotationY: 0, rotationX: 0,
+        transformPerspective: 1100,
+      }, {
+        x: () => mobile ? -introSlot.offsetLeft * .35 : introLeft.getBoundingClientRect().left - introSlot.getBoundingClientRect().left,
+        y: () => mobile ? 24 : introTitle.getBoundingClientRect().bottom + 42 - introSlot.getBoundingClientRect().top,
+        rotation: -360, duration: 1, ease: "power2.inOut",
+      }, 0)
+        .fromTo(introSurface, { progress: 0 }, { progress: 1, duration: 1, ease: "none", onUpdate: () => introSurface.render?.() }, 0);
 
       const panels = select(".j-solution-image") as HTMLElement[];
       const steps = gsap.timeline({
@@ -149,6 +171,8 @@ export function XPJourney() {
         appSection.inert = false;
         panels.forEach((panel) => { panel.inert = false; });
         chapterMotion.current.forEach((surface) => { surface.progress = 0; surface.render?.(); });
+        introSurface.progress = 0;
+        introSurface.render?.();
       };
     });
     return () => mm.revert();
@@ -206,7 +230,7 @@ export function XPJourney() {
 
         <section className="j-intro" id="sobre">
           <div className="j-intro-left j-intro-reveal"><p className="j-kicker">01 / A SUA VIDA NO CENTRO</p><h2>Não é só<br />sobre dinheiro.<br /><em>É sobre você.</em></h2><p className="j-intro-foot">Seus planos mudam. Suas ambições crescem.<br />A sua vida financeira precisa acompanhar.</p></div>
-          <div className="j-intro-right j-intro-reveal"><div className="j-intro-photo"><Photo src="/images/xp-people.jpg" alt="Pessoas reunidas para conversar e planejar" /></div><h3>Primeiro, o que<br />importa para você.<br /><em>Depois, os caminhos<br />para chegar lá.</em></h3><p>Investimentos, planejamento e soluções financeiras conectados aos seus objetivos. Tudo começa com a sua próxima escolha.</p><a className="j-text-link" href="#solucoes">Encontre o seu caminho <ArrowDown size={19} /></a></div>
+          <div className="j-intro-right j-intro-reveal"><div className="j-intro-photo-slot"><div className="j-intro-photo"><Photo src="/images/xp-people.jpg" alt="Pessoas reunidas para conversar e planejar" />{tier !== "low" && <ChapterShader motion={introMotion} onReady={registerIntroShader} index={0} imageSrc="/images/xp-people.jpg" />}</div></div><h3>Primeiro, o que<br />importa para você.<br /><em>Depois, os caminhos<br />para chegar lá.</em></h3><p>Investimentos, planejamento e soluções financeiras conectados aos seus objetivos. Tudo começa com a sua próxima escolha.</p><a className="j-text-link" href="#solucoes">Encontre o seu caminho <ArrowDown size={19} /></a></div>
         </section>
 
         <section className="j-solutions" id="solucoes">
@@ -241,6 +265,8 @@ export function XPJourney() {
     </div>
   );
 }
+
+
 
 
 

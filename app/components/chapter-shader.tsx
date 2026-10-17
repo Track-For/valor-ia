@@ -19,6 +19,9 @@ const fragmentSource = `
   uniform float uProgress;
   uniform float uDark;
   uniform float uAspect;
+  uniform sampler2D uImage;
+  uniform float uHasImage;
+  uniform float uImageAspect;
 
   void main() {
     float p = clamp(uProgress, 0.0, 1.0);
@@ -36,16 +39,27 @@ const fragmentSource = `
     vec3 light = mix(vec3(1.0, 0.93, 0.63), vec3(1.0, 0.99, 0.94), sweep);
     float alpha = energy * (sweep * mix(0.24, 0.42, uDark) + broad * 0.055 + rim * 0.27);
     alpha *= 0.96 + grain * 0.04;
-    gl_FragColor = vec4(light, alpha);
+    if (uHasImage > 0.5) {
+      vec2 photoUv = vUv - 0.5;
+      if (uImageAspect > uAspect) photoUv.x *= uAspect / uImageAspect;
+      else photoUv.y *= uImageAspect / uAspect;
+      photoUv += 0.5;
+      photoUv.x += sin(vUv.y * 6.283 + p * 4.0) * energy * 0.018;
+      vec3 photo = texture2D(uImage, clamp(photoUv, 0.001, 0.999)).rgb;
+      gl_FragColor = vec4(mix(photo, light, alpha * 0.55), 1.0);
+    } else {
+      gl_FragColor = vec4(light, alpha);
+    }
   }
 `;
 
 /** A transparent, event-rendered WebGL surface over the accessible HTML card. */
-export function ChapterShader({ motion, index, dark = false, onReady }: {
+export function ChapterShader({ motion, index, dark = false, onReady, imageSrc }: {
   motion: RefObject<ChapterMotion[]>;
   index: number;
   dark?: boolean;
   onReady: (index: number, render: () => void) => () => void;
+  imageSrc?: string;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -68,9 +82,11 @@ export function ChapterShader({ motion, index, dark = false, onReady }: {
     const fragment = compile(gl.FRAGMENT_SHADER, fragmentSource);
     const program = gl.createProgram();
     const buffer = gl.createBuffer();
+    const texture = gl.createTexture();
     const dispose = () => {
       if (buffer) gl.deleteBuffer(buffer);
       if (program) gl.deleteProgram(program);
+      if (texture) gl.deleteTexture(texture);
       shaders.forEach(shader => gl.deleteShader(shader));
     };
     if (!vertex || !fragment || !program || !buffer) { dispose(); return; }
@@ -87,6 +103,17 @@ export function ChapterShader({ motion, index, dark = false, onReady }: {
     const progress = gl.getUniformLocation(program, "uProgress");
     const aspect = gl.getUniformLocation(program, "uAspect");
     gl.uniform1f(gl.getUniformLocation(program, "uDark"), dark ? 1 : 0);
+    // A complete placeholder texture keeps non-photo surfaces valid as well.
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 0]));
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.uniform1i(gl.getUniformLocation(program, "uImage"), 0);
+    gl.uniform1f(gl.getUniformLocation(program, "uHasImage"), 0);
+    gl.uniform1f(gl.getUniformLocation(program, "uImageAspect"), 1);
     let lost = false;
     const render = () => {
       if (lost) return;
@@ -108,14 +135,29 @@ export function ChapterShader({ motion, index, dark = false, onReady }: {
     const observer = new ResizeObserver(resize);
     observer.observe(canvas);
     resize();
+    const photo = imageSrc ? new window.Image() : null;
+    if (photo) {
+      photo.onload = () => {
+        if (lost) return;
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, photo);
+        gl.uniform1f(gl.getUniformLocation(program, "uHasImage"), 1);
+        gl.uniform1f(gl.getUniformLocation(program, "uImageAspect"), photo.naturalWidth / photo.naturalHeight);
+        canvas.dataset.image = "ready";
+        render();
+      };
+      photo.src = imageSrc!;
+    }
     return () => {
+      if (photo) photo.onload = null;
       unregister();
       observer.disconnect();
       canvas.removeEventListener("webglcontextlost", onLost);
       dispose();
 
     };
-  }, [motion, index, dark, onReady]);
+  }, [motion, index, dark, onReady, imageSrc]);
 
   return <canvas ref={canvasRef} className="j-chapter-shader" aria-hidden="true" />;
 }

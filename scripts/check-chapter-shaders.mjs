@@ -7,7 +7,7 @@ await p.goto("http://localhost:3000",{waitUntil:"networkidle"});await p.waitForT
 const start=await p.locator(".j-finale").evaluate(e=>e.getBoundingClientRect().top+scrollY);
 await p.evaluate(y=>scrollTo(0,y),start+900*5*.40);await p.waitForTimeout(1200);
 await p.screenshot({path:"artifacts/journey/shader-entrance.png"});
-const shaders=await p.locator(".j-chapter-shader").evaluateAll(els=>els.map(e=>({ready:e.dataset.shader,error:e.getContext("webgl").getError()})));
+const shaders=await p.locator(".j-chapter .j-chapter-shader").evaluateAll(els=>els.map(e=>({ready:e.dataset.shader,error:e.getContext("webgl").getError()})));
 console.log(JSON.stringify({shaders,errors}));assert.equal(shaders.length,3);assert(shaders.every(s=>s.ready==="ready"&&s.error===0));
 await p.evaluate(y=>scrollTo(0,y),start+900*5*.69);await p.waitForTimeout(1500);
 await p.screenshot({path:"artifacts/journey/shader-settled.png"});
@@ -16,4 +16,5 @@ const before=await transforms();await p.waitForTimeout(700);assert.deepEqual(awa
 assert.deepEqual(errors,[]);
 console.log(JSON.stringify({shaders,settled:true,errors}));
 await browser.close();
+
 
