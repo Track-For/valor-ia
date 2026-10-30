@@ -18,15 +18,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Capital em Movimento | XP",
+  title: "Gestão para Sellers Magalu | Valor IA",
   description:
-    "Investimentos, planejamento e solucoes financeiras para diferentes momentos da sua jornada.",
-  applicationName: "XP Capital em Movimento",
-  metadataBase: new URL("https://www.xpi.com.br"),
+    "Gestão financeira e contábil para sellers do Magalu.",
+  applicationName: "Valor IA · Gestão para Sellers",
+  metadataBase: new URL("https://valor-ia.com.br"),
   openGraph: {
-    title: "Capital em Movimento | XP",
+    title: "Gestão para Sellers Magalu | Valor IA",
     description:
-      "Uma experiencia digital sobre o ecossistema de investimentos, planejamento e solucoes financeiras da XP.",
+      "Gestão financeira e contábil para sellers do Magalu.",
     type: "website",
     locale: "pt_BR",
   },
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   colorScheme: "dark",
-  themeColor: "#0b0b0b",
+  themeColor: "#1683c4",
   width: "device-width",
   initialScale: 1,
 };

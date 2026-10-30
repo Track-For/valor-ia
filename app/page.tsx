@@ -1,5 +1,5 @@
-﻿import { XPJourney } from "./components/xp-journey";
+import { SellerLanding } from "./components/xp-journey";
 
 export default function Home() {
-  return <XPJourney />;
+  return <SellerLanding />;
 }

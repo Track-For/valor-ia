@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
@@ -32,7 +32,7 @@ const fragmentShader = /* glsl */ `
     float sweep = exp(-pow((vUv.x + vUv.y * 0.4 - 0.65 - sin(uTime * 0.3) * 0.65) * 5.0, 2.0));
     float sheen = pow(max(dot(reflect(-normalize(vec3(-0.6, 1.0, 1.5)), n), view), 0.0), 12.0);
     vec3 color = base + vec3(0.045, 0.043, 0.035) * sweep * (0.3 + sheen);
-    color += vec3(1.0, 0.82, 0.22) * rim * 0.24;
+    color += vec3(0.12, 0.52, 0.82) * rim * 0.24;
     gl_FragColor = vec4(color, 1.0);
     #include <tonemapping_fragment>
     #include <colorspace_fragment>
@@ -43,7 +43,7 @@ function Card({ pointer }: { pointer: RefObject<THREE.Vector2> }) {
   const group = useRef<THREE.Group>(null);
   const elapsed = useRef(0);
   const material = useRef<THREE.ShaderMaterial>(null);
-  const face = useTexture("/images/xp-card.svg", (texture) => {
+  const face = useTexture("/images/client-logo.png", (texture) => {
     texture.colorSpace = THREE.SRGBColorSpace;
   });
   const uniforms = useMemo(() => ({ uFace: { value: face }, uTime: { value: 0 } }), [face]);

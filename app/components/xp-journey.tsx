@@ -1,8 +1,7 @@
-﻿"use client";
+"use client";
 
 import { useCallback, useRef, useState } from "react";
 import Image from "next/image";
-import dynamic from "next/dynamic";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -12,40 +11,39 @@ import { ChapterShader, type ChapterMotion } from "./chapter-shader";
 import "./xp-journey.css";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
-const HeroCard = dynamic(() => import("./hero-orbit"), { ssr: false });
-const OPEN_ACCOUNT = "https://cadastro.xpi.com.br/v3/cadastro/nome";
+const MAIN_SITE_URL = "https://valor-ia.com.br";
+const WHATSAPP_URL = "https://wa.me/?text=Olá!%20Quero%20entender%20como%20a%20gestão%20financeira%20e%20contábil%20pode%20ajudar%20minha%20operação%20no%20Magalu.";
 
 const solutions = [
-  { name: "Investir", tag: "Seu dinheiro, com direção.", text: "Encontre possibilidades para construir uma carteira alinhada aos seus objetivos e ao seu perfil.", image: "/images/capital-layers.png", label: "Uma carteira. Muitas possibilidades.", category: "INVESTIMENTOS", href: "https://www.xpi.com.br/investimentos/" },
-  { name: "Planejar", tag: "O futuro começa nas escolhas de hoje.", text: "Dê forma aos seus planos com uma visão que conecta o presente, o patrimônio e o que vem depois.", image: "/images/xp-horizon.jpg", label: "Mais horizonte para os seus planos.", category: "PLANEJAMENTO", href: "https://www.xpi.com.br/" },
-  { name: "Viver", tag: "Seu patrimônio também faz parte do agora.", text: "Conecte investimentos e vida financeira em uma experiência que acompanha o seu dia a dia.", image: "/images/xp-card.svg", label: "Para a vida que acontece agora.", category: "CONTA E CARTÃO", href: "https://www.xpi.com.br/produtos/cartao-de-credito/" },
-  { name: "Expandir", tag: "Novos caminhos para ir além.", text: "Uma visão mais ampla para conectar seus projetos, sua empresa e suas próximas conquistas.", image: "/images/xp-city.jpg", label: "Seu próximo passo não tem fronteiras.", category: "NOVAS POSSIBILIDADES", href: "https://www.xpi.com.br/" },
+  { name: "CPF", tag: "Comece com clareza", text: "Vende como pessoa física? Organize entradas, custos e obrigações para entender o resultado real das suas vendas", image: "/images/seller-cpf.jpg", label: "Sua venda também merece gestão", category: "SELLER PESSOA FÍSICA", href: MAIN_SITE_URL },
+  { name: "MEI", tag: "Separe o negócio da vida pessoal", text: "Tenha apoio financeiro e contábil para cuidar da rotina do MEI e acompanhar cada etapa da operaçã.", image: "/images/seller-mei.jpg", label: "Mais controle para crescer com segurança", category: "SELLER MEI", href: MAIN_SITE_URL },
+  { name: "Simples", tag: "Decisões melhores começam nos números", text: "Organize a gestão da empresa, acompanhe o financeiro e conte com orientação contábil para o Simples Nacional", image: "/images/seller-simples.png", label: "Gestão alinhada ao tamanho do seu negócio", category: "SIMPLES NACIONAL", href: MAIN_SITE_URL },
 ];
 const chapters = [
-  { n: "01", name: "Seu começo.", title: "Toda conquista começa com uma escolha.", text: "Organize a vida financeira e encontre o seu ponto de partida.", items: ["Seus objetivos no centro", "Uma visão da sua carteira", "Conteúdo para decidir"], code: "COMEÇAR" },
-  { n: "02", name: "Seu movimento.", title: "Mais possibilidades para o seu dinheiro.", text: "Conecte seus investimentos ao momento que você está vivendo.", items: ["Estratégia para os seus planos", "Investimentos e vida financeira", "Uma experiência conectada"], code: "EVOLUIR" },
-  { n: "03", name: "Seu amanhã.", title: "Um patrimônio que olha para a frente.", text: "Dê continuidade ao que você construiu e espaço ao que ainda quer realizar.", items: ["Planejamento de longo prazo", "Uma visão para cada etapa", "O próximo capítulo é seu"], code: "CONSTRUIR" },
+  { n: "01", name: "Pessoa física", title: "Vende com CPF no Magalu?", text: "Entenda como organizar a rotina financeira de quem vende como pessoa física e quais são os próximos passos para formalizar a operação", items: ["Organização de receitas e custos", "Visão do resultado das vendas", "Orientação para o próximo passo"], code: "CPF" },
+  { n: "02", name: "MEI", title: "Cuide bem da sua estrutura", text: "Apoio para manter a rotina financeira e contábil do MEI organizada enquanto você toca suas vendas", items: ["Contabilidade para MEI", "Acompanhamento financeiro", "Rotina e obrigações em dia"], code: "MEI" },
+  { n: "03", name: "Simples Nacional", title: "Gestão para a empresa crescer", text: "Uma visão financeira e contábil conectada à operação de quem vende no marketplace e está no Simples Nacional", items: ["Gestão financeira da empresa", "Acompanhamento contábil", "Informação para decidir"], code: "SIMPLES" },
 ];
 
 function Photo({ src, alt = "", className = "" }: { src: string; alt?: string; className?: string }) {
   return <Image className={className} src={src} alt={alt} fill sizes="(max-width: 760px) 95vw, 55vw" />;
 }
-function LinkCTA({ children, href = OPEN_ACCOUNT }: { children: React.ReactNode; href?: string }) {
+function LinkCTA({ children, href = MAIN_SITE_URL }: { children: React.ReactNode; href?: string }) {
   return <a className="j-cta" href={href}>{children}<ArrowUpRight size={19} aria-hidden="true" /></a>;
 }
 function PortfolioGraphic() {
-  return <div className="j-portfolio"><span className="j-micro">UMA VISÃO DO TODO</span><h3>Seu patrimônio.<br />Em perspectiva.</h3><svg viewBox="0 0 400 150" aria-hidden="true"><path d="M0 130 48 110 85 118 130 80 165 90 215 44 250 58 295 24 340 38 400 4" fill="none" stroke="currentColor" strokeWidth="3" /><path d="M0 150h400M0 100h400M0 50h400" stroke="currentColor" strokeOpacity=".14" /></svg><div className="j-portfolio-bottom"><span>Planejar</span><span>Diversificar</span><span>Acompanhar</span></div></div>;
+  return <div className="j-portfolio"><span className="j-micro">UMA VISÃO DO TODO</span><h3>Seu patrimônio<br />Em perspectiva</h3><svg viewBox="0 0 400 150" aria-hidden="true"><path d="M0 130 48 110 85 118 130 80 165 90 215 44 250 58 295 24 340 38 400 4" fill="none" stroke="currentColor" strokeWidth="3" /><path d="M0 150h400M0 100h400M0 50h400" stroke="currentColor" strokeOpacity=".14" /></svg><div className="j-portfolio-bottom"><span>Planejar</span><span>Diversificar</span><span>Acompanhar</span></div></div>;
 }
 function GalleryTile({ type }: { type: number }) {
-  if (type === 0) return <div className="j-tile j-tile-card"><span className="j-micro">XP / NO SEU DIA A DIA</span><Image src="/images/xp-card.svg" width={1284} height={810} alt="Conceito de cartão XP preto" /><strong>Mais vida.<br />Mais possibilidades.</strong></div>;
-  if (type === 1) return <div className="j-tile j-tile-photo"><Photo src="/images/xp-city.jpg" /><span>Onde você quer chegar?</span></div>;
+  if (type === 0) return <div className="j-tile j-tile-card"><span className="j-micro">GESTÃO PARA SELLERS</span><Image src="/images/client-logo.png" width={260} height={154} alt="Marca do cliente" /><strong>Números claros<br />Escolhas melhores</strong></div>;
+  if (type === 1) return <div className="j-tile j-tile-photo"><Photo src="/images/seller-cpf.jpg" alt="Equipe conversando sobre gestão e riscos" /><span>Gestão mais próxima da operação</span></div>;
   if (type === 2) return <div className="j-tile j-tile-chart"><PortfolioGraphic /></div>;
-  if (type === 3) return <div className="j-tile j-tile-photo"><Photo src="/images/capital-layers.png" /><span>Construir, camada por camada.</span></div>;
-  if (type === 4) return <div className="j-tile j-tile-type"><span className="j-micro">CAPITAL EM MOVIMENTO</span><strong>O futuro<br />tem a sua<br /><em>direção.</em></strong><ArrowUpRight size={54} /></div>;
-  return <div className="j-tile j-tile-photo"><Photo src="/images/xp-horizon.jpg" /><span>Espaço para novos planos.</span></div>;
+  if (type === 3) return <div className="j-tile j-tile-photo"><Photo src="/images/seller-packing.png" alt="Seller preparando pedidos para envio" /><span>Construir, pedido por pedido</span></div>;
+  if (type === 4) return <div className="j-tile j-tile-type"><span className="j-micro">SELLER MAGALU</span><strong>Seu negócio<br />em boa<br /><em>gestão</em></strong><ArrowUpRight size={54} /></div>;
+  return <div className="j-tile j-tile-photo"><Photo src="/images/seller-mei.jpg" alt="Empreendedor trabalhando em seu negócio" /><span>Organize sua próxima etapa</span></div>;
 }
 
-export function XPJourney() {
+export function SellerLanding() {
   const root = useRef<HTMLDivElement>(null);
   const introMotion = useRef<ChapterMotion[]>([{ progress: 0 }]);
   const registerIntroShader = useCallback((index: number, render: () => void) => {
@@ -105,7 +103,7 @@ export function XPJourney() {
         defaults: { ease: "none" },
         onUpdate: function (this: gsap.core.Timeline) {
           const time = this.time();
-          const index = time < 1.1 ? 0 : time < 2.3 ? 1 : time < 3.5 ? 2 : 3;
+          const index = Math.min(panels.length - 1, time < 1.1 ? 0 : time < 2.3 ? 1 : 2);
           setActive(index);
           panels.forEach((panel, i) => { panel.inert = i !== index; });
         },
@@ -194,49 +192,53 @@ export function XPJourney() {
     <div className="journey" ref={root}>
       <a className="skip-link" href="#j-conteudo">Pular para o conteúdo</a>
       <header className="j-header">
-        <a href="#inicio" className="j-logo" aria-label="XP — início">XP<span>INVESTIMENTOS</span></a>
+        <a href="#inicio" className="j-logo" aria-label="Página inicial"><Image src="/images/client-logo.png" width={104} height={62} alt="" /><span>GESTÃO PARA<br />SELLERS MAGALU</span></a>
         <nav aria-label="Navegação principal" className={menu ? "j-nav is-open" : "j-nav"}>
-          {[["Universo XP", "#universo"], ["Soluções", "#solucoes"], ["Seu futuro", "#futuro"]].map(([label, href]) => <a key={href} href={href} onClick={() => setMenu(false)}>{label}</a>)}
-          <a href={OPEN_ACCOUNT} onClick={() => setMenu(false)}>Abra sua conta <ArrowUpRight size={14} /></a>
+          {[["Para sellers", "#universo"], ["Encontre seu perfil", "#solucoes"], ["Sobre o trabalho", "#futuro"]].map(([label, href]) => <a key={href} href={href} onClick={() => setMenu(false)}>{label}</a>)}
+          <a href={MAIN_SITE_URL} onClick={() => setMenu(false)}>Conheça a Valor IA <ArrowUpRight size={14} /></a>
         </nav>
         <button className="j-menu" onClick={() => setMenu(!menu)} aria-label={menu ? "Fechar menu" : "Abrir menu"} aria-expanded={menu}>{menu ? <X /> : <Menu />}</button>
       </header>
 
       <main id="j-conteudo">
         <section className="j-hero" id="inicio">
-          <div className="j-hero-topline"><span>CAPITAL EM MOVIMENTO</span><span>O PRÓXIMO CAPÍTULO É SEU.</span></div>
+          <div className="j-hero-topline"><span>GESTÃO FINANCEIRA E CONTÁBIL</span><span>GESTÃO PARA SELLERS MAGALU</span></div>
           <div className="j-hero-copy">
-            <p className="j-kicker"><i /> A VIDA NÃO PARA. SEU PATRIMÔNIO TAMBÉM NÃO.</p>
-            <h1>Seu próximo<br /><em>capítulo.</em></h1>
-            <p>Investir é abrir espaço para o que vem.<br />Viva suas possibilidades com a XP.</p>
-            <LinkCTA>Abra sua conta</LinkCTA>
+            <p className="j-kicker"><i /> VOCÊ VENDE NO MAGALU. A GENTE CUIDA DOS NÚMEROS.</p>
+            <h1>Venda mais<br /><em>Organize melhor</em></h1>
+            <p>Gestão financeira e contábil feita para a realidade de quem vende em marketplace</p>
+            <LinkCTA>Conheça a Valor IA</LinkCTA>
+            <a className="j-whatsapp-link" href={WHATSAPP_URL} target="_blank" rel="noreferrer">Tire dúvidas pelo WhatsApp <ArrowUpRight size={15} /></a>
           </div>
           <div className="j-hero-art" aria-hidden="true">
-            {tier === "low" ? <Image className="j-static-card" src="/images/xp-card.svg" alt="" width={1284} height={810} priority /> : <HeroCard quality={tier} />}
+            <video className="j-hero-video" autoPlay loop muted playsInline preload="metadata" poster="/images/client-logo-higgsfield.png">
+              <source src="/videos/hf_20261030_113443_0dc9aed9-f778-4a8c-9f81-b73d3d48ab5a.mp4" type="video/mp4" />
+            </video>
+            <Image className="j-hero-still" src="/images/client-logo.png" alt="" width={1040} height={616} />
           </div>
-          <div className="j-hero-bottom"><a href="#universo">Explore o seu próximo passo <ArrowDown size={17} /></a><span>INVESTIR. VIVER. IR ALÉM.</span></div>
+          <div className="j-hero-bottom"><a href="#universo">Veja como podemos ajudar <ArrowDown size={17} /></a><span>CONTABILIDADE • FINANCEIRO • GESTÃO</span></div>
         </section>
 
-        <section className={"j-gallery " + (paused ? "is-paused" : "")} id="universo" aria-label="Universo XP em movimento">
+        <section className={"j-gallery " + (paused ? "is-paused" : "")} id="universo" aria-label="Gestão financeira e contábil para sellers">
           <div className="j-gallery-shell">
             <div className="j-gallery-columns">
               {[[0, 1, 4], [3, 2, 5], [5, 4, 0]].map((column, index) => <div className="j-gallery-column" key={index}><div className={"j-gallery-track " + (index === 1 ? "is-reverse" : "")}>
                 {[0, 1].map((copy) => <div className="j-gallery-group" key={copy} aria-hidden={copy === 1 ? true : undefined}>{column.map((type, i) => <GalleryTile type={type} key={i} />)}</div>)}
               </div></div>)}
             </div>
-            <div className="j-gallery-caption"><h2>Um universo de<br /><em>possibilidades.</em></h2><button onClick={() => setPaused(!paused)} aria-label={paused ? "Retomar movimento da galeria" : "Pausar movimento da galeria"} aria-pressed={paused}>{paused ? <Play size={17} /> : <Pause size={17} />}</button></div>
+            <div className="j-gallery-caption"><h2>Seu negócio merece<br /><em>uma boa gestão</em></h2><button onClick={() => setPaused(!paused)} aria-label={paused ? "Retomar movimento da galeria" : "Pausar movimento da galeria"} aria-pressed={paused}>{paused ? <Play size={17} /> : <Pause size={17} />}</button></div>
           </div>
         </section>
 
         <section className="j-intro" id="sobre">
-          <div className="j-intro-left j-intro-reveal"><p className="j-kicker">01 / A SUA VIDA NO CENTRO</p><h2>Não é só<br />sobre dinheiro.<br /><em>É sobre você.</em></h2><p className="j-intro-foot">Seus planos mudam. Suas ambições crescem.<br />A sua vida financeira precisa acompanhar.</p></div>
-          <div className="j-intro-right j-intro-reveal"><div className="j-intro-photo-slot"><div className="j-intro-photo"><Photo src="/images/xp-people.jpg" alt="Pessoas reunidas para conversar e planejar" />{tier !== "low" && <ChapterShader motion={introMotion} onReady={registerIntroShader} index={0} imageSrc="/images/xp-people.jpg" />}</div></div><h3>Primeiro, o que<br />importa para você.<br /><em>Depois, os caminhos<br />para chegar lá.</em></h3><p>Investimentos, planejamento e soluções financeiras conectados aos seus objetivos. Tudo começa com a sua próxima escolha.</p><a className="j-text-link" href="#solucoes">Encontre o seu caminho <ArrowDown size={19} /></a></div>
+          <div className="j-intro-left j-intro-reveal"><p className="j-kicker">01 / QUEM VENDE NO MAGALU</p><h2>Você cuida<br />das vendas<br /><em>A gente dos números</em></h2><p className="j-intro-foot">A operação cresce, as tarefas se acumulam.<br />Tenha apoio para cuidar da gestão</p></div>
+          <div className="j-intro-right j-intro-reveal"><div className="j-intro-photo-slot"><div className="j-intro-photo"><Photo src="/images/client-team.png" alt="Equipe da Valor IA" />{tier !== "low" && <ChapterShader motion={introMotion} onReady={registerIntroShader} index={0} imageSrc="/images/client-team.png" />}</div></div><h3>Financeiro<br />e contábil<br /><em>no mesmo time</em></h3><p>Uma equipe para apoiar a rotina do seu negócio: organização financeira, contabilidade e informação para orientar suas decisões</p><a className="j-text-link" href="#solucoes">Encontre seu perfil <ArrowDown size={19} /></a></div>
         </section>
 
         <section className="j-solutions" id="solucoes">
-          <div className="j-solutions-copy"><p className="j-kicker">02 / POSSIBILIDADES QUE SE CONECTAM</p><h2>Para cada<br /><em>próximo passo.</em></h2><div className="j-solution-list">
+          <div className="j-solutions-copy"><p className="j-kicker">02 / ESCOLHA O SEU PERFIL</p><h2>Uma gestão para<br /><em>cada fase</em></h2><div className="j-solution-list">
             {solutions.map((solution, i) => <button key={solution.name} className={active === i ? "is-active" : ""} aria-current={active === i ? "step" : undefined} onClick={() => jumpToSolution(i)}><span className="j-step-number">0{i + 1}</span><span>{solution.name}</span><ArrowUpRight size={23} /><small>{solution.tag}</small></button>)}
-          </div><p className="j-scroll-note">CONTINUE ROLANDO PARA EXPLORAR <ArrowDown size={14} /></p></div>
+          </div><p className="j-scroll-note">ESCOLHA O PERFIL QUE COMBINA COM VOCÊ <ArrowDown size={14} /></p></div>
           <div className="j-solution-images">
             {solutions.map((solution, i) => <article className={"j-solution-image j-solution-" + i} id={"solucao-" + i} key={solution.name}>
               <Photo src={solution.image} alt={solution.label} />
@@ -247,21 +249,21 @@ export function XPJourney() {
 
         <div className="j-finale" id="futuro">
           <div className="j-finale-stage">
-            <section className="j-statement" aria-label="O que importa"><div className="j-color-fill" /><div className="j-statement-content"><p className="j-kicker">03 / O QUE MOVE VOCÊ</p><h2>O seu dinheiro<br />a serviço do que<br /><mark><em>realmente importa.</em></mark></h2><p>A vida que você quer viver.</p></div></section>
+            <section className="j-statement" aria-label="Gestão para o seu negócio"><div className="j-color-fill" /><div className="j-statement-content"><p className="j-kicker">03 / MAIS TEMPO PARA A SUA OPERAÇÃO</p><h2>Você faz o negócio<br />acontecer<br /><mark><em>Conte com a gente</em></mark></h2><p>Gestão financeira e contábil para sellers Magalu</p></div></section>
 
-            <section className="j-card-scene" aria-label="Os próximos capítulos da sua vida">
+            <section className="j-card-scene" aria-label="Trilhas para cada perfil de seller">
               <div className="j-chapters">
-                {chapters.map((chapter, index) => <article className="j-chapter" key={chapter.n}>{tier !== "low" && <ChapterShader motion={chapterMotion} onReady={registerChapterShader} index={index} dark={index === 2} />}<div className="j-chapter-top"><span>XP / {chapter.n}</span><ArrowUpRight size={24} /></div><h2>{chapter.name}</h2><h3>{chapter.title}</h3><p>{chapter.text}</p><ul>{chapter.items.map(item => <li key={item}>{item}</li>)}</ul><div className="j-chapter-ticket"><span>O PRÓXIMO CAPÍTULO É SEU</span><strong>{chapter.code}</strong><div className="j-barcode" aria-hidden="true" /></div></article>)}
+                {chapters.map((chapter, index) => <article className="j-chapter" key={chapter.n}>{tier !== "low" && <ChapterShader motion={chapterMotion} onReady={registerChapterShader} index={index} dark={index === 2} />}<div className="j-chapter-top"><span>SELLER / {chapter.n}</span><ArrowUpRight size={24} /></div><h2>{chapter.name}</h2><h3>{chapter.title}</h3><p>{chapter.text}</p><ul>{chapter.items.map(item => <li key={item}>{item}</li>)}</ul><div className="j-chapter-ticket"><span>FALE COM A NOSSA EQUIPE</span><strong>{chapter.code}</strong><div className="j-barcode" aria-hidden="true" /></div></article>)}
               </div>
             </section>
 
-            <section className="j-app" id="app" aria-label="Sua vida financeira conectada"><div className="j-app-copy"><p className="j-kicker">04 / TUDO SE CONECTA</p><h2>Seu universo.<br /><em>Com você.</em></h2><p>Do primeiro investimento aos próximos grandes planos. Uma experiência para acompanhar o seu movimento.</p><LinkCTA>Comece o seu próximo capítulo</LinkCTA><span className="j-app-note">XP. INVESTIR TRANSFORMA.</span></div></section>
-            <div className="j-device" aria-hidden="true"><div className="j-device-screen"><div className="j-device-nav"><b>XP</b><span>Seu próximo capítulo</span><span>● ● ●</span></div><div className="j-device-bottom"><span>SEUS PLANOS. SUAS POSSIBILIDADES.</span><ArrowUpRight size={18} /></div></div><span className="j-device-camera" /></div>
+            <section className="j-app" id="app" aria-label="Gestão financeira e contábil"><div className="j-app-copy"><p className="j-kicker">04 / CONTE COM A VALOR IA</p><h2>Seu negócio<br /><em>Em boas mãos</em></h2><p>Acesse o site principal para conhecer os serviços de gestão financeira e contábil para a sua operação</p><LinkCTA>Conheça a Valor IA</LinkCTA><a className="j-whatsapp-link" href={WHATSAPP_URL} target="_blank" rel="noreferrer">Prefere conversar? Chame no WhatsApp <ArrowUpRight size={15} /></a><span className="j-app-note">GESTÃO FINANCEIRA • CONTABILIDADE</span></div></section>
+            <div className="j-device" aria-hidden="true"><div className="j-device-screen"><div className="j-device-nav"><b>SELLER</b><span>Resumo da operação</span><span>● ● ●</span></div><div className="j-device-bottom"><span>FINANCEIRO • CONTÁBIL • GESTÃO</span><ArrowUpRight size={18} /></div></div><span className="j-device-camera" /></div>
           </div>
         </div>
       </main>
 
-      <footer className="j-footer" id="contato"><div className="j-footer-top"><div><p>O futuro não espera.</p><a href={OPEN_ACCOUNT}>Vamos em frente. <ArrowUpRight /></a></div><nav aria-label="Links do rodapé"><a href="#universo">Universo XP</a><a href="#solucoes">Soluções</a><a href="#futuro">Seu futuro</a><a href="https://www.xpi.com.br/">Site oficial XP <ArrowUpRight size={14} /></a></nav><div className="j-footer-contact"><span>SEU PRÓXIMO PASSO</span><a href={OPEN_ACCOUNT}>Abra sua conta <ArrowRight size={18} /></a></div></div><a className="j-footer-wordmark" href="#inicio" aria-label="XP Investimentos — voltar ao início"><span>XP</span><span>INVESTIR<br /><em>TRANSFORMA.</em></span></a><div className="j-footer-bottom"><span>© 2026 XP · Capital em movimento</span><p>Conteúdo institucional. Imagens e interfaces ilustrativas.</p><a href="https://www.xpi.com.br/politica-de-privacidade/">Privacidade <ArrowUpRight size={12} /></a></div></footer>
+      <footer className="j-footer" id="contato"><div className="j-footer-top"><div><p>Você cuida das vendas</p><a href={MAIN_SITE_URL}>Conheça a Valor IA <ArrowUpRight /></a></div><nav aria-label="Links do rodapé"><a href="#universo">Como podemos ajudar</a><a href="#solucoes">Escolha seu perfil</a><a href="#futuro">Sobre o serviço</a><a href={MAIN_SITE_URL} target="_blank" rel="noreferrer">Site principal <ArrowUpRight size={14} /></a></nav><div className="j-footer-contact"><span>FALE COM A NOSSA EQUIPE</span><a href={WHATSAPP_URL} target="_blank" rel="noreferrer">WhatsApp <ArrowRight size={18} /></a></div></div><a className="j-footer-wordmark" href="#inicio" aria-label="Voltar ao início"><span><Image src="/images/client-logo.png" width={260} height={154} alt="" /></span><span>GESTÃO<br /><em>PARA SELLERS</em></span></a><div className="j-footer-bottom"><span>Valor IA · Gestão financeira e contábil</span><p>Atendimento especializado para sellers do Magalu</p><a href={MAIN_SITE_URL} target="_blank" rel="noreferrer">Conheça a empresa <ArrowUpRight size={12} /></a></div></footer>
     </div>
   );
 }
