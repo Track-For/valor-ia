@@ -9,6 +9,8 @@
 .approach-heading h2 em{position:relative;display:inline-block;font-family:Georgia,"Times New Roman",serif;color:var(--j-yellow);font-weight:400;font-style:italic;white-space:nowrap}
 .approach-heading h2 em:after{content:"";position:absolute;left:3%;right:-2%;bottom:-.04em;height:.1em;border-radius:50%;background:#88cbe980;transform:rotate(-2deg);z-index:-1}
 .approach-intro{max-width:39ch;margin:0 0 .2em!important;font-size:clamp(13px,1.05vw,16px);line-height:1.55;color:#435b68}
+.approach-contact{display:inline-flex;align-items:center;gap:12px;margin-top:18px;padding-bottom:7px;border-bottom:1px solid currentColor;color:#126fa8;font-size:13px;line-height:1.3}
+.approach-contact:hover{color:#0a527d}
 .approach-stage{position:relative;min-height:0}
 .approach-cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;width:100%;height:100%;margin:0;padding:0;list-style:none}
 .approach-card{position:relative;min-width:0;height:100%;padding:4px;border:1px solid #94b9cc;overflow:hidden}
@@ -30,6 +32,7 @@
   .approach-kicker{margin-bottom:10px!important;font-size:9px}
   .approach-heading h2{font-size:clamp(44px,4.2vw,62px);line-height:.94}
   .approach-intro{font-size:12px;line-height:1.4}
+  .approach-contact{margin-top:10px;font-size:11px}
   .approach-number{margin-bottom:10px}
   .approach-card h3{font-size:clamp(23px,2vw,31px);margin-bottom:7px}
   .approach-card p{font-size:11px;line-height:1.35}

@@ -1,4 +1,5 @@
 import "./approach-section.css";
+import { ArrowUpRight } from "lucide-react";
 
 const approachSteps = [
   {
@@ -42,7 +43,7 @@ function polygonPoints(sides: number, samples = 32) {
 
 export const approachShapePoints = [3, 4, 5, 8, 32].map((sides) => polygonPoints(sides));
 
-export function ApproachSection() {
+export function ApproachSection({ contactUrl }: { contactUrl: string }) {
   return (
     <section className="approach-section" id="abordagem" aria-labelledby="approach-title">
       <div className="approach-top">
@@ -50,7 +51,10 @@ export function ApproachSection() {
           <p className="approach-kicker">COMO TRABALHAMOS / VALOR IA</p>
           <h2 id="approach-title">Mais clareza para decidir.<br />Mais tempo para <em>vender</em></h2>
         </div>
-        <p className="approach-intro">Para quem vende no Magalu, a gestão precisa acompanhar o ritmo da operação. A Valor IA reúne apoio financeiro e contábil para organizar informações, entender resultados e orientar os próximos passos do negócio</p>
+        <div className="approach-aside">
+          <p className="approach-intro">Para quem vende no Magalu, a gestão precisa acompanhar o ritmo da operação. A Valor IA reúne apoio financeiro e contábil para organizar informações, entender resultados e orientar os próximos passos do negócio</p>
+          <a className="approach-contact" href={contactUrl} target="_blank" rel="noreferrer">Converse sobre sua operação <ArrowUpRight size={16} aria-hidden="true" /></a>
+        </div>
       </div>
 
       <div className="approach-stage">

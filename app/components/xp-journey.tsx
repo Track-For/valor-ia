@@ -260,21 +260,21 @@ export function SellerLanding() {
                 {[0, 1].map((copy) => <div className="j-gallery-group" key={copy} aria-hidden={copy === 1 ? true : undefined}>{column.map((type, i) => <GalleryTile type={type} key={i} />)}</div>)}
               </div></div>)}
             </div>
-            <div className="j-gallery-caption"><h2>Seu negócio merece<br /><em>uma boa gestão</em></h2><button onClick={() => setPaused(!paused)} aria-label={paused ? "Retomar movimento da galeria" : "Pausar movimento da galeria"} aria-pressed={paused}>{paused ? <Play size={17} /> : <Pause size={17} />}</button></div>
+            <div className="j-gallery-caption"><div className="j-gallery-caption-copy"><h2>Seu negócio merece<br /><em>uma boa gestão</em></h2><a href={WHATSAPP_URL} target="_blank" rel="noreferrer">Converse com a equipe <ArrowUpRight size={17} aria-hidden="true" /></a></div><button onClick={() => setPaused(!paused)} aria-label={paused ? "Retomar movimento da galeria" : "Pausar movimento da galeria"} aria-pressed={paused}>{paused ? <Play size={17} /> : <Pause size={17} />}</button></div>
           </div>
         </section>
 
         <section className="j-intro" id="sobre">
           <div className="j-intro-left j-intro-reveal"><p className="j-kicker">01 / QUEM VENDE NO MAGALU</p><h2>Você cuida<br />das vendas<br /><em>A gente dos números</em></h2><p className="j-intro-foot">A operação cresce, as tarefas se acumulam.<br />Tenha apoio para cuidar da gestão</p></div>
-          <div className="j-intro-right j-intro-reveal"><div className="j-intro-photo-slot"><div className="j-intro-photo"><Photo src="/images/client-team.png" alt="Equipe da Valor IA" />{tier !== "low" && <ChapterShader motion={introMotion} onReady={registerIntroShader} index={0} imageSrc="/images/client-team.png" />}</div></div><h3>Financeiro<br />e contábil<br /><em>no mesmo time</em></h3><p>Uma equipe para apoiar a rotina do seu negócio: organização financeira, contabilidade e informação para orientar suas decisões</p><a className="j-text-link" href="#solucoes">Encontre seu perfil <ArrowDown size={19} /></a></div>
+          <div className="j-intro-right j-intro-reveal"><div className="j-intro-photo-slot"><div className="j-intro-photo"><Photo src="/images/client-team.png" alt="Equipe da Valor IA" />{tier !== "low" && <ChapterShader motion={introMotion} onReady={registerIntroShader} index={0} imageSrc="/images/client-team.png" />}</div></div><h3>Financeiro<br />e contábil<br /><em>no mesmo time</em></h3><p>Uma equipe para apoiar a rotina do seu negócio: organização financeira, contabilidade e informação para orientar suas decisões</p><div className="j-intro-actions"><a className="j-text-link" href="#solucoes">Encontre seu perfil <ArrowDown size={19} /></a><a className="j-text-link" href={WHATSAPP_URL} target="_blank" rel="noreferrer">Fale com a equipe <ArrowUpRight size={18} aria-hidden="true" /></a></div></div>
         </section>
 
-        <ApproachSection />
+        <ApproachSection contactUrl={WHATSAPP_URL} />
 
         <section className="j-solutions" id="solucoes">
           <div className="j-solutions-copy"><p className="j-kicker">02 / ESCOLHA O SEU PERFIL</p><h2>Uma gestão para<br /><em>cada fase</em></h2><div className="j-solution-list">
             {solutions.map((solution, i) => <button key={solution.name} className={active === i ? "is-active" : ""} aria-current={active === i ? "step" : undefined} onClick={() => jumpToSolution(i)}><span className="j-step-number">0{i + 1}</span><span>{solution.name}</span><ArrowUpRight size={23} /><small>{solution.tag}</small></button>)}
-          </div><p className="j-scroll-note">ESCOLHA O PERFIL QUE COMBINA COM VOCÊ <ArrowDown size={14} /></p></div>
+          </div><a className="j-solutions-contact" href={WHATSAPP_URL} target="_blank" rel="noreferrer">Não sabe qual perfil escolher? Fale com a equipe <ArrowUpRight size={17} aria-hidden="true" /></a><p className="j-scroll-note">ESCOLHA O PERFIL QUE COMBINA COM VOCÊ <ArrowDown size={14} /></p></div>
           <div className="j-solution-images">
             {solutions.map((solution, i) => <article className={"j-solution-image j-solution-" + i} id={"solucao-" + i} key={solution.name}>
               <Photo src={solution.image} alt={solution.label} />
@@ -289,7 +289,7 @@ export function SellerLanding() {
 
             <section className="j-card-scene" aria-label="Trilhas para cada perfil de seller">
               <div className="j-chapters">
-                {chapters.map((chapter, index) => <article className="j-chapter" key={chapter.n}>{tier !== "low" && <ChapterShader motion={chapterMotion} onReady={registerChapterShader} index={index} dark={index === 2} />}<div className="j-chapter-top"><span>SELLER / {chapter.n}</span><ArrowUpRight size={24} /></div><h2>{chapter.name}</h2><h3>{chapter.title}</h3><p>{chapter.text}</p><ul>{chapter.items.map(item => <li key={item}>{item}</li>)}</ul><div className="j-chapter-ticket"><span>FALE COM A NOSSA EQUIPE</span><strong>{chapter.code}</strong><div className="j-barcode" aria-hidden="true" /></div></article>)}
+                {chapters.map((chapter, index) => <article className="j-chapter" key={chapter.n}>{tier !== "low" && <ChapterShader motion={chapterMotion} onReady={registerChapterShader} index={index} dark={index === 2} />}<div className="j-chapter-top"><span>SELLER / {chapter.n}</span><ArrowUpRight size={24} /></div><h2>{chapter.name}</h2><h3>{chapter.title}</h3><p>{chapter.text}</p><ul>{chapter.items.map(item => <li key={item}>{item}</li>)}</ul><a className="j-chapter-ticket" href={WHATSAPP_URL} target="_blank" rel="noreferrer" aria-label={`Fale com a equipe sobre o perfil ${chapter.name}`}><span>FALE COM A NOSSA EQUIPE ↗</span><strong>{chapter.code}</strong><div className="j-barcode" aria-hidden="true" /></a></article>)}
               </div>
             </section>
 
