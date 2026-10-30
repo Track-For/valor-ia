@@ -279,6 +279,8 @@
 .j-hero h1{font-size:clamp(68px,7.7vw,136px)}
 .j-hero h1 em{color:#1683c4}
 .j-kicker i{background:#1683c4}
+.j-hero-actions{display:flex;align-items:center;gap:18px;margin-top:26px}
+.j-hero-actions .j-cta,.j-hero-actions .j-whatsapp-link{margin:0}
 .j-whatsapp-link{display:inline-flex;align-items:center;gap:9px;margin:22px 0 0 18px;font-size:12px;border-bottom:1px solid #12212b55;padding-bottom:5px}
 .j-whatsapp-link:hover{color:#0877b5}
 .j-tile-type{background:#1683c4;color:#fff}
@@ -291,4 +293,4 @@
 .j-device-screen{background:#1683c4;color:#fff}
 .j-chapter:nth-child(3){background:#183d56;color:#f3f6f7}
 .j-color-fill{background:linear-gradient(to bottom,#1683c4 0%,#1683c4 74%,#b6dff4 85%,#eff8fc 92%,#f3f6f700 100%)}
-@media(max-width:760px){.j-logo img{width:60px}.j-logo span{font-size:7px}.j-hero-copy{width:100%}.j-whatsapp-link{margin:14px 0 0;font-size:11px}.j-footer-wordmark>span:first-child{flex-basis:40%}.j-footer-wordmark>span:first-child img{width:100%}}@media(prefers-reduced-motion:reduce){.j-color-fill{background:linear-gradient(#1683c4,#1683c4)}}
+@media(max-width:760px){.j-logo img{width:60px}.j-logo span{font-size:7px}.j-hero-copy{width:100%}.j-hero-actions{flex-direction:column;align-items:flex-start;gap:14px;margin-top:20px}.j-whatsapp-link{margin:14px 0 0;font-size:11px}.j-footer-wordmark>span:first-child{flex-basis:40%}.j-footer-wordmark>span:first-child img{width:100%}}@media(prefers-reduced-motion:reduce){.j-color-fill{background:linear-gradient(#1683c4,#1683c4)}}

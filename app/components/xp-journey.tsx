@@ -8,11 +8,12 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowDown, ArrowUpRight, ArrowRight, Pause, Play, Menu, X } from "lucide-react";
 import { usePerformanceTier } from "./use-performance-tier";
 import { ChapterShader, type ChapterMotion } from "./chapter-shader";
+import { ApproachSection, approachShapePoints } from "./approach-section";
 import "./xp-journey.css";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
-const MAIN_SITE_URL = "https://valor-ia.com.br";
-const WHATSAPP_URL = "https://wa.me/?text=Olá!%20Quero%20entender%20como%20a%20gestão%20financeira%20e%20contábil%20pode%20ajudar%20minha%20operação%20no%20Magalu.";
+const MAIN_SITE_URL = "https://valor-ia.com";
+const WHATSAPP_URL = "https://wa.me/5511999819297?text=Olá!%20Quero%20entender%20como%20a%20gestão%20financeira%20e%20contábil%20pode%20ajudar%20minha%20operação%20no%20Magalu.";
 
 const solutions = [
   { name: "CPF", tag: "Comece com clareza", text: "Vende como pessoa física? Organize entradas, custos e obrigações para entender o resultado real das suas vendas", image: "/images/seller-cpf.jpg", label: "Sua venda também merece gestão", category: "SELLER PESSOA FÍSICA", href: MAIN_SITE_URL },
@@ -64,7 +65,7 @@ export function SellerLanding() {
 
   useGSAP(() => {
     const mm = gsap.matchMedia();
-    mm.add({ motion: "(prefers-reduced-motion: no-preference)", mobile: "(max-width: 760px)" }, (context) => {
+    mm.add({ motion: "(prefers-reduced-motion: no-preference)", mobile: "(max-width: 760px)", approachDesktop: "(min-width: 1024px)" }, (context) => {
       if (!context.conditions?.motion || !root.current) return;
       const mobile = Boolean(context.conditions.mobile);
       const scope = root.current;
@@ -97,6 +98,37 @@ export function SellerLanding() {
         rotation: -360, duration: 1, ease: "power2.inOut",
       }, 0)
         .fromTo(introSurface, { progress: 0 }, { progress: 1, duration: 1, ease: "none", onUpdate: () => introSurface.render?.() }, 0);
+
+      const approach = scope.querySelector<HTMLElement>(".approach-section");
+      if (context.conditions?.approachDesktop && approach) {
+        const approachPanels = Array.from(approach.querySelectorAll<HTMLElement>(".approach-card-panel"));
+        const approachCopies = Array.from(approach.querySelectorAll<HTMLElement>(".approach-card-copy"));
+        const approachShape = approach.querySelector<SVGSVGElement>(".approach-shape")!;
+        const approachPolygon = approachShape.querySelector<SVGPolygonElement>("polygon")!;
+        gsap.set(approachPanels, { scaleY: .58 });
+        gsap.set(approachCopies, { y: 24, opacity: 0 });
+        gsap.set(approachPanels[0], { scaleY: 1 });
+        gsap.set(approachCopies[0], { y: 0, opacity: 1 });
+
+        const approachTimeline = gsap.timeline({
+          defaults: { ease: "none" },
+          scrollTrigger: {
+            id: "approach", trigger: approach, start: "top top",
+            end: () => "+=" + window.innerHeight * 2.35,
+            pin: true, scrub: .55, invalidateOnRefresh: true,
+          },
+        });
+        approachTimeline.to({}, { duration: .35 });
+        approachPanels.slice(1).forEach((panel, position) => {
+          const index = position + 1;
+          const at = position + .35;
+          approachTimeline.to(panel, { scaleY: 1, duration: .72 }, at)
+            .to(approachCopies[index], { y: 0, opacity: 1, duration: .58 }, at + .18);
+          approachTimeline.to(approachShape, { left: `${10 + index * 20}%`, duration: .78 }, at - .12)
+            .to(approachPolygon, { attr: { points: approachShapePoints[index] }, duration: .78 }, at - .12);
+        });
+        approachTimeline.to({}, { duration: .25 });
+      }
 
       const panels = select(".j-solution-image") as HTMLElement[];
       const steps = gsap.timeline({
@@ -194,7 +226,7 @@ export function SellerLanding() {
       <header className="j-header">
         <a href="#inicio" className="j-logo" aria-label="Página inicial"><Image src="/images/client-logo.png" width={104} height={62} alt="" /><span>GESTÃO PARA<br />SELLERS MAGALU</span></a>
         <nav aria-label="Navegação principal" className={menu ? "j-nav is-open" : "j-nav"}>
-          {[["Para sellers", "#universo"], ["Encontre seu perfil", "#solucoes"], ["Sobre o trabalho", "#futuro"]].map(([label, href]) => <a key={href} href={href} onClick={() => setMenu(false)}>{label}</a>)}
+          {[["Para sellers", "#universo"], ["Abordagem", "#abordagem"], ["Encontre seu perfil", "#solucoes"]].map(([label, href]) => <a key={href} href={href} onClick={() => setMenu(false)}>{label}</a>)}
           <a href={MAIN_SITE_URL} onClick={() => setMenu(false)}>Conheça a Valor IA <ArrowUpRight size={14} /></a>
         </nav>
         <button className="j-menu" onClick={() => setMenu(!menu)} aria-label={menu ? "Fechar menu" : "Abrir menu"} aria-expanded={menu}>{menu ? <X /> : <Menu />}</button>
@@ -207,8 +239,10 @@ export function SellerLanding() {
             <p className="j-kicker"><i /> VOCÊ VENDE NO MAGALU. A GENTE CUIDA DOS NÚMEROS.</p>
             <h1>Venda mais<br /><em>Organize melhor</em></h1>
             <p>Gestão financeira e contábil feita para a realidade de quem vende em marketplace</p>
-            <LinkCTA>Conheça a Valor IA</LinkCTA>
-            <a className="j-whatsapp-link" href={WHATSAPP_URL} target="_blank" rel="noreferrer">Tire dúvidas pelo WhatsApp <ArrowUpRight size={15} /></a>
+            <div className="j-hero-actions">
+              <LinkCTA>Conheça a Valor IA</LinkCTA>
+              <a className="j-whatsapp-link" href={WHATSAPP_URL} target="_blank" rel="noreferrer">Tire dúvidas pelo WhatsApp <ArrowUpRight size={15} /></a>
+            </div>
           </div>
           <div className="j-hero-art" aria-hidden="true">
             <video className="j-hero-video" autoPlay loop muted playsInline preload="metadata" poster="/images/client-logo-higgsfield.png">
@@ -234,6 +268,8 @@ export function SellerLanding() {
           <div className="j-intro-left j-intro-reveal"><p className="j-kicker">01 / QUEM VENDE NO MAGALU</p><h2>Você cuida<br />das vendas<br /><em>A gente dos números</em></h2><p className="j-intro-foot">A operação cresce, as tarefas se acumulam.<br />Tenha apoio para cuidar da gestão</p></div>
           <div className="j-intro-right j-intro-reveal"><div className="j-intro-photo-slot"><div className="j-intro-photo"><Photo src="/images/client-team.png" alt="Equipe da Valor IA" />{tier !== "low" && <ChapterShader motion={introMotion} onReady={registerIntroShader} index={0} imageSrc="/images/client-team.png" />}</div></div><h3>Financeiro<br />e contábil<br /><em>no mesmo time</em></h3><p>Uma equipe para apoiar a rotina do seu negócio: organização financeira, contabilidade e informação para orientar suas decisões</p><a className="j-text-link" href="#solucoes">Encontre seu perfil <ArrowDown size={19} /></a></div>
         </section>
+
+        <ApproachSection />
 
         <section className="j-solutions" id="solucoes">
           <div className="j-solutions-copy"><p className="j-kicker">02 / ESCOLHA O SEU PERFIL</p><h2>Uma gestão para<br /><em>cada fase</em></h2><div className="j-solution-list">
