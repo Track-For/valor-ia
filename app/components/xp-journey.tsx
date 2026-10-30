@@ -8,7 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowDown, ArrowUpRight, ArrowRight, Pause, Play, Menu, X } from "lucide-react";
 import { usePerformanceTier } from "./use-performance-tier";
 import { ChapterShader, type ChapterMotion } from "./chapter-shader";
-import { ApproachSection, approachShapePoints } from "./approach-section";
+import { approachShapePoints } from "./approach-section";
 import "./xp-journey.css";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -269,7 +269,7 @@ export function SellerLanding() {
           <div className="j-intro-right j-intro-reveal"><div className="j-intro-photo-slot"><div className="j-intro-photo"><Photo src="/images/client-team.png" alt="Equipe da Valor IA" />{tier !== "low" && <ChapterShader motion={introMotion} onReady={registerIntroShader} index={0} imageSrc="/images/client-team.png" />}</div></div><h3>Financeiro<br />e contábil<br /><em>no mesmo time</em></h3><p>Uma equipe para apoiar a rotina do seu negócio: organização financeira, contabilidade e informação para orientar suas decisões</p><div className="j-intro-actions"><a className="j-text-link" href="#solucoes">Encontre seu perfil <ArrowDown size={19} /></a><a className="j-text-link" href={WHATSAPP_URL} target="_blank" rel="noreferrer">Fale com a equipe <ArrowUpRight size={18} aria-hidden="true" /></a></div></div>
         </section>
 
-        <ApproachSection contactUrl={WHATSAPP_URL} />
+        {/* <ApproachSection contactUrl={WHATSAPP_URL} /> */}
 
         <section className="j-solutions" id="solucoes">
           <div className="j-solutions-copy"><p className="j-kicker">02 / ESCOLHA O SEU PERFIL</p><h2>Uma gestão para<br /><em>cada fase</em></h2><div className="j-solution-list">
@@ -293,7 +293,7 @@ export function SellerLanding() {
               </div>
             </section>
 
-            <section className="j-app" id="app" aria-label="Gestão financeira e contábil"><div className="j-app-copy"><p className="j-kicker">04 / CONTE COM A VALOR IA</p><h2>Seu negócio<br /><em>Em boas mãos</em></h2><p>Acesse o site principal para conhecer os serviços de gestão financeira e contábil para a sua operação</p><LinkCTA>Conheça a Valor IA</LinkCTA><a className="j-whatsapp-link" href={WHATSAPP_URL} target="_blank" rel="noreferrer">Prefere conversar? Chame no WhatsApp <ArrowUpRight size={15} /></a><span className="j-app-note">GESTÃO FINANCEIRA • CONTABILIDADE</span></div></section>
+            <section className="j-app" id="app" aria-label="Gestão financeira e contábil"><div className="j-app-copy"><p className="j-kicker">04 / CONTE COM A VALOR IA</p><h2>Seu negócio<br /><em>Em boas mãos</em></h2><p>Acesse o site principal para conhecer os serviços de gestão financeira e contábil para a sua operação</p><div className="j-app-actions"><LinkCTA>Conheça a Valor IA</LinkCTA><a className="j-whatsapp-link" href={WHATSAPP_URL} target="_blank" rel="noreferrer">Prefere conversar? Chame no WhatsApp <ArrowUpRight size={15} /></a></div><span className="j-app-note">GESTÃO FINANCEIRA • CONTABILIDADE</span></div></section>
             <div className="j-device" aria-hidden="true"><div className="j-device-screen"><div className="j-device-nav"><b>SELLER</b><span>Resumo da operação</span><span>● ● ●</span></div><div className="j-device-bottom"><span>FINANCEIRO • CONTÁBIL • GESTÃO</span><ArrowUpRight size={18} /></div></div><span className="j-device-camera" /></div>
           </div>
         </div>
